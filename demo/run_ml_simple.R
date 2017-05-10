@@ -157,6 +157,9 @@ for(i in 1:length(uyears)){
 
 write.csv(out, 'out/annual_toha_estimate.csv', row.names=FALSE)
 
-
-mda.lakes::opti_thermal_habitat(opt_wtr, io, kd$Kd, ll[1], ll[2], bathy, irr_thresh = c(0.0762, 0.6476), 
-                                wtr_thresh=c(11,25), interp_hour=FALSE, area_type="benthic")
+png('out/figures/toha_annual.png', res=450, width=2100, height=3000)
+par(mfrow = c(3,1), mar=c(1,4,1,1), oma=c(3,0,0,0))
+plot(out$year, out$opti_therm_hab, ylab='Thermo-Optical Habitat', xaxt='n', type='o', pch=16)
+plot(out$year, out$therm_hab, ylab='Thermal Habitat', xaxt='n', type='o', pch=16)
+plot(out$year, out$opti_hab, ylab='Optical Habitat', xlab='year', type='o', pch=16)
+dev.off()
