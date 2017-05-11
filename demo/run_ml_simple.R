@@ -7,6 +7,7 @@ res = optim(fn = tomod, par=initial_params, control=list(parscale=c(initial_para
 library(mda.lakes)
 library(glmtools)
 library(lakemodeltools)
+library(lubridate)
 
 ll = c(46.244647, -93.652001)
 # dvr = lakemodeltools::nldas_to_glm_drivers(nldastools::get_primary_forcing_local(ll[2], ll[1]))
@@ -146,12 +147,20 @@ kd      = subset(kd, time %in% opt_wtr$DateTime)
 
 uyears = unique(lubridate::year(opt_wtr$DateTime))
 out = data.frame()
-for(i in 1:length(uyears)){
-  opti = mda.lakes::opti_thermal_habitat(subset(opt_wtr, lubridate::year(DateTime) == uyears[i]), 
-                                         subset(io, lubridate::year(DateTime) == uyears[i]), 
-                                         subset(kd, lubridate::year(time) == uyears[i])$Kd, ll[1], ll[2], bathy, irr_thresh = c(0.0762, 0.6476), 
+season = 4:6
+
+for(i in 1:(nrow(opt_wtr)-1)){
+#   opti = mda.lakes::opti_thermal_habitat(subset(opt_wtr, lubridate::year(DateTime) == uyears[i] & month(DateTime) %in% season), 
+#                                          subset(io, lubridate::year(DateTime) == uyears[i] & month(DateTime) %in% season), 
+#                                          subset(kd, lubridate::year(time) == uyears[i] & month(time) %in% season)$Kd, ll[1], ll[2], bathy, irr_thresh = c(0.0762, 0.6476), 
+#                                   wtr_thresh=c(11,25), interp_hour=TRUE, area_type="benthic")
+#   opti$year = uyears[i]
+  opti = mda.lakes::opti_thermal_habitat(opt_wtr[i:(i+1),],
+                                         io[i:(i+1),],  
+                                         kd[i:(i+1),]$Kd, ll[1], ll[2], bathy, irr_thresh = c(0.0762, 0.6476), 
                                   wtr_thresh=c(11,25), interp_hour=TRUE, area_type="benthic")
-  opti$year = uyears[i]
+  
+  opti$DateTime = opt_wtr$DateTime[i]
   out = rbind(opti, out)
 }
 
@@ -160,6 +169,9 @@ write.csv(out, 'out/annual_toha_estimate.csv', row.names=FALSE)
 png('out/figures/toha_annual.png', res=450, width=2100, height=3000)
 par(mfrow = c(3,1), mar=c(1,4,1,1), oma=c(3,0,0,0))
 plot(out$year, out$opti_therm_hab, ylab='Thermo-Optical Habitat', xaxt='n', type='o', pch=16)
+abline(v=1988);abline(v=1993);abline(v=2013)
 plot(out$year, out$therm_hab, ylab='Thermal Habitat', xaxt='n', type='o', pch=16)
+abline(v=1988);abline(v=1993);abline(v=2013)
 plot(out$year, out$opti_hab, ylab='Optical Habitat', xlab='year', type='o', pch=16)
+abline(v=1988);abline(v=1993);abline(v=2013)
 dev.off()
