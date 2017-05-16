@@ -1,8 +1,4 @@
 
-lower = initial_params * 0.6
-upper = initial_params * 1.4
-res = optim(fn = tomod, par=initial_params, control=list(parscale=c(initial_params*0.1)))
-
 #first crack at running ML GLM
 library(mda.lakes)
 library(glmtools)
@@ -127,6 +123,7 @@ tomod = function(param, Kw_file=NULL){
   
 }
 
+##### Run and calc TOHA #####
 
 initial_params = c('cd'=0.0014, 'ce'=0.0014, ch=0.0014, coef_wind_stir=0.376, coef_mix_hyp=0.22, coef_mix_conv=0.2, coef_mix_KH=0.074)
 
@@ -164,7 +161,15 @@ for(i in 1:(nrow(opt_wtr)-1)){
   out = rbind(opti, out)
 }
 
-write.csv(out, 'out/annual_toha_estimate.csv', row.names=FALSE)
+
+write.csv(opt_wtr, 'out/wtr_for_toha.csv', row.names=FALSE)
+write.csv(out, 'out/daily_toha_estimate.csv', row.names=FALSE)
+
+
+plot(out$DateTime, out$opti_therm_hab, type='l', col='green')
+abline(v=as.POSIXct('1988-01-01'));abline(v=as.POSIXct('1993-01-01'));abline(v=as.POSIXct('2013-01-01'))
+
+
 
 png('out/figures/toha_annual.png', res=450, width=2100, height=3000)
 par(mfrow = c(3,1), mar=c(1,4,1,1), oma=c(3,0,0,0))
@@ -175,3 +180,15 @@ abline(v=1988);abline(v=1993);abline(v=2013)
 plot(out$year, out$opti_hab, ylab='Optical Habitat', xlab='year', type='o', pch=16)
 abline(v=1988);abline(v=1993);abline(v=2013)
 dev.off()
+
+
+
+
+##### Run Optim on Model #####
+lower = initial_params * 0.6
+upper = initial_params * 1.4
+
+initial_params = c('cd'=0.0014, 'ce'=0.0014, ch=0.0014, coef_wind_stir=0.376, coef_mix_hyp=0.22, coef_mix_conv=0.2, coef_mix_KH=0.074)
+
+res = optim(fn = tomod, par=initial_params, control=list(parscale=c(initial_params*0.1)), Kw_file=file.path(getwd(), 'inst/extdata/ml_model_kd.csv'))
+
