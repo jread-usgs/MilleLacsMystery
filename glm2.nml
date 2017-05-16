@@ -73,9 +73,9 @@
    at_factor = 1
    rh_factor = 1
    rain_factor = 1
-   ce = 0.0014
-   ch = 0.0014
-   cd = 0.0014
+   ce = 0.001575723
+   ch = 0.002022848
+   cd = 0.0008665132
    rain_threshold = 0.01
    runoff_coef = 0.3
 /
