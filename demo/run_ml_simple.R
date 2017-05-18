@@ -125,7 +125,8 @@ tomod = function(param, Kw_file=NULL){
 
 ##### Run and calc TOHA #####
 
-initial_params = c('cd'=0.0014, 'ce'=0.0014, ch=0.0014, coef_wind_stir=0.376, coef_mix_hyp=0.22, coef_mix_conv=0.2, coef_mix_KH=0.074)
+initial_params = c('cd'=0.0014, 'ce'=0.0014, ch=0.0014, coef_wind_stir=0.376, 
+                   coef_mix_hyp=0.22, coef_mix_conv=0.2, coef_mix_KH=0.074)
 
 tomod(initial_params, Kw_file=file.path(getwd(), 'inst/extdata/ml_model_kd.csv'))
 
@@ -188,7 +189,9 @@ dev.off()
 lower = initial_params * 0.6
 upper = initial_params * 1.4
 
-initial_params = c('cd'=0.0014, 'ce'=0.0014, ch=0.0014, coef_wind_stir=0.376, coef_mix_hyp=0.22, coef_mix_conv=0.2, coef_mix_KH=0.074)
+initial_params = c('cd'=0.0014, 'ce'=0.0014, ch=0.0014, coef_wind_stir=0.376, 
+                   coef_mix_conv=0.2, sw_factor=1, at_factor=1, rh_factor=1)
 
-res = optim(fn = tomod, par=initial_params, control=list(parscale=c(initial_params*0.1)), Kw_file=file.path(getwd(), 'inst/extdata/ml_model_kd.csv'))
+res = optim(fn = tomod, par=initial_params, control=list(parscale=c(initial_params*0.1)), 
+            Kw_file=file.path(getwd(), 'inst/extdata/ml_model_kd.csv'))
 

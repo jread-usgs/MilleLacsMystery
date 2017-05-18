@@ -68,14 +68,14 @@
    subdaily = .false.
    meteo_fl = 'inst/extdata/ml_nldas_drivers.csv'
    wind_factor = 1
-   sw_factor = 1
+   sw_factor = 0.9086321
    lw_factor = 1
-   at_factor = 1
-   rh_factor = 1
+   at_factor = 0.9312693
+   rh_factor = 1.02603
    rain_factor = 1
-   ce = 0.001575723
-   ch = 0.002022848
-   cd = 0.0008665132
+   ce = 0.001482367
+   ch = 0.001485972
+   cd = 0.001407726
    rain_threshold = 0.01
    runoff_coef = 0.3
 /
