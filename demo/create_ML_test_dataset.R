@@ -33,3 +33,8 @@ out.df <- out.df %>% filter(!is.na(Depth), DateTime > as.Date("1990-06-14")) %>%
 
 saveRDS(out.df, 'inst/extdata/full_training_ML.rds')
 
+challenge.df <- out.df %>% filter(dim_1 < 5600 | dim_1 > 8200)
+write.table(x = challenge.df, file = 'out/ML_challenge_single_system.tsv', sep = '\t', row.names = FALSE, quote = TRUE)
+
+TrainData <- challenge.df[, -2]
+TrainClasses = as.factor(challenge.df$dim_2)
