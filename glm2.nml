@@ -11,7 +11,7 @@
    coef_mix_turb = 0.51
    coef_mix_KH = 0.074
    coef_mix_hyp = 0.22
-   Kw_file = 'inst/extdata/ml_model_kd.csv'
+   Kw_file = 'inst/extdata/ml_model_kd_2017.csv'
 /
 &morphometry
    lake_name = 'ml'
@@ -26,7 +26,7 @@
 &time
    timefmt = 2
    start = '1980-04-01'
-   stop = '2016-10-01'
+   stop = '2017-01-01'
    dt = 3600
    timezone = -6
 /
